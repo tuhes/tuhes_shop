@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Товары{% endblock %}
+
+{% block content %}
+    <div>
+    {% if user.is_authenticated %}
+        <p>{{ user.username }}, Вы авторизованы</p>
+    {% endif %}
+    </div>
+    {% for item in items %}
+        <div>
+            <a href="{{ item.get_absolute_url }}"><h1>{{ item.name }}</h1></a>
+            <p>{{ item.price }} руб.</p>
+        </div>
+    {% endfor %}
+{% endblock %}
