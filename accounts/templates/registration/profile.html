@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Профиль {{ user.username }}</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <td>
+                <h2>Профиль {{ user.username }}</h2>
+            </td>
+        </tr>
+        <tr>
+            <td><b>Username:</b></td>
+            <td>{{ user.username }}</td>
+        </tr>
+        <tr>
+            <td><b>Email:</b></td>
+            <td>{{ user.email }}</td>
+        </tr>
+        <tr>
+            <td><b>Номер телефона:</b></td>
+            <td>{{ user.profile.tel }}</td>
+        </tr>
+        <tr>
+            <td><b>Дата рождения:</b></td>
+            <td>{{ user.profile.birth_date }}</td>
+        </tr>
+        <tr>
+            <td><b>Дата присоединения:</b></td>
+            <td>{{ user.date_joined }}</td>
+        </tr>
+    </table>
+</body>
+</html>
