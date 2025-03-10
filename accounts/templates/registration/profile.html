@@ -32,5 +32,10 @@
             <td>{{ user.date_joined }}</td>
         </tr>
     </table>
+    <hr>
+    <form action="{% url 'accounts:logout_view' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Выйти</button>
+    </form>
 </body>
 </html>

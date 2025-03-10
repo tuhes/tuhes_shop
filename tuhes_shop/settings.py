@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'catalog.apps.CatalogConfig',
     'accounts.apps.AccountsConfig',
+    'cart.apps.CartConfig',
     'django_extensions'
 ]
 
@@ -140,3 +141,5 @@ LOGIN_REDIRECT_URL = '/catalog/'
 LOGOUT_REDIRECT_URL = '/catalog/'
 
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 7 * 4
+
+CART_SESSION_ID = 'cart'

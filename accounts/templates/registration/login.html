@@ -10,10 +10,9 @@
     {{ form.as_p }}
     <button type="submit">Войти</button>
 </form>
-
-<form action="{% url 'logout' %}" method="post">
-    {% csrf_token %}
-    <button type="submit">Выйти</button>
-</form>
+<hr>
+<div>
+    <a href="{% url 'accounts:register_view' %}"><button>Перейти к регистрации</button></a>
+</div>
 </body>
 </html>

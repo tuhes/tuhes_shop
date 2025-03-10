@@ -10,7 +10,7 @@ def item_list(request):
     return render(request, 'item/list.html', context={'items': items})
 
 
-@login_required(login_url='login')
+@login_required(login_url='accounts:login_view')
 def item_detail(request, id, slug):
     """
     Вывод отдельного товара (в наличии)
