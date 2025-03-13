@@ -11,5 +11,10 @@
         <p>
             <b>{{ item.price }} руб.</b>
         </p>
+        <form action="{% url 'cart:cart_add' item.id %}" method="post">
+        {{ cart_add_item_form }}
+        {% csrf_token %}
+        <input type="submit" value="Добавить в корзину">
+    </form>
     </div>
 {% endblock %}

@@ -2,11 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Корзина</title>
 </head>
 <body>
+<h1>Корзина</h1>
+<hr>
+<table>
+    <thead>
+        <tr>
+            <th>Продукт</th>
+            <th>Кол-во</th>
+            <th>Цена за штуку</th>
+            <th>Cтоимость</th>
+        </tr>
+    </thead>
+<tbody>
 {% for item in cart %}
-
+{% with product=item.product %}
+<tr>
+    <td>{{ product.name }}</td>
+    <td>{{ item.quantity }}</td>
+    <td>{{ item.price }} руб.</td>
+    <td>{{ item.total_price }} руб.</td>
+    <td>
+        <form action="{% url 'cart:cart_remove' product.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Удалить</button>
+        </form>
+    </td>
+</tr>
+{% endwith %}
 {% endfor %}
+<tr>
+    <td colspan="4">Итого: {{ cart.get_total_price }} руб.</td>
+</tr>
+</tbody>
+</table>
+<form action="{% url 'cart:cart_clear' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Очистить корзину</button>
+</form>
 </body>
 </html>

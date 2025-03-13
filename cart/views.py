@@ -15,9 +15,22 @@ def cart_add(request, item_id):
         cart.add(item=item,
                  quantity=cd['quantity'],
                  override=cd['override'])
-    return redirect('')
+    return redirect('cart:cart_detail')
 
 
 def cart_detail(request):
     cart = Cart(request)
     return render(request, 'cart/detail.html', {'cart': cart})
+
+@require_POST
+def cart_remove(request, item_id):
+    cart = Cart(request)
+    item = get_object_or_404(Item, id=item_id)
+    cart.remove(item)
+    return redirect('cart:cart_detail')
+
+@require_POST
+def cart_clear(request):
+    cart = Cart(request)
+    cart.clear()
+    return redirect('cart:cart_detail')
