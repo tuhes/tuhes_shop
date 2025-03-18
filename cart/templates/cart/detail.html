@@ -10,7 +10,7 @@
 <table>
     <thead>
         <tr>
-            <th>Продукт</th>
+            <th>Предмет</th>
             <th>Кол-во</th>
             <th>Цена за штуку</th>
             <th>Cтоимость</th>
@@ -20,7 +20,7 @@
 {% for item in cart %}
 {% with product=item.product %}
 <tr>
-    <td>{{ product.name }}</td>
+    <td><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></td>
     <td>{{ item.quantity }}</td>
     <td>{{ item.price }} руб.</td>
     <td>{{ item.total_price }} руб.</td>
