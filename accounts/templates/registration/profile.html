@@ -33,6 +33,38 @@
         </tr>
     </table>
     <hr>
+    <h2>Активные заказы</h2>
+    <ul>
+        {% for order in active_orders %}
+            <li>Заказ № {{ order.id }}, Создан: {{ order.created_at }}
+                <form method="post" action="{% url 'orders:order_cancel' order.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Отменить заказ</button>
+                </form>
+            </li>
+        {% empty %}
+            <li>Нет активных заказов</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Выполненные заказы</h2>
+    <ul>
+        {% for order in completed_orders %}
+            <li>Заказ № {{ order.id }}, Создан: {{ order.created_at }}</li>
+        {% empty %}
+            <li>Нет выполненных заказов</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Отменённые заказы</h2>
+    <ul>
+        {% for order in canceled_orders %}
+            <li>Заказ № {{ order.id }}, Создан: {{ order.created_at }}</li>
+        {% empty %}
+            <li>Нет отменённых заказов</li>
+        {% endfor %}
+    </ul>
+    <hr>
     <form action="{% url 'accounts:logout_view' %}" method="post">
         {% csrf_token %}
         <button type="submit">Выйти</button>

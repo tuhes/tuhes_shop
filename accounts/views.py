@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from accounts.forms import CustomAuthenticationForm, CustomUserCreationForm
 from django.contrib.auth import authenticate, login, logout
+from orders.models import Order
 
 
 def login_view(request):
@@ -49,4 +50,15 @@ def register_view(request):
 
 @login_required(login_url='accounts:login_view')
 def profile_view(request):
-    return render(request, 'registration/profile.html')
+    user = request.user
+    active_orders = Order.objects.filter(user=user, status='active')
+    completed_orders = Order.objects.filter(user=user, status='completed')
+    canceled_orders = Order.objects.filter(user=user, status='canceled')
+
+    orders = {
+        'active_orders': active_orders,
+        'completed_orders': completed_orders,
+        'canceled_orders': canceled_orders,
+    }
+
+    return render(request, 'registration/profile.html', context=orders)
