@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Заказ № {{order.id}}</title>
+</head>
+<body>
+    <div>
+        <h1>Заказ № {{ order.id }}</h1>
+
+        <p>Дата заказа: {{ order.created_at }}</p>
+        <p>Статус: {{ order.get_status_display }}</p>
+        <p>Телефон: {{order.phone}}</p>
+        <p>Почта: {{order.email}}</p>
+
+        <h2>Содержимое заказа</h2>
+        <ul>
+            {% for item in order_items %}
+                <li>
+                    <a href="{% url 'catalog:item_detail' item.item.id item.item.slug%}">{{ item.item.name }}</a>
+                    Количество: {{ item.quantity }}
+                    Цена: {{ item.price }} руб.
+                    Итого: {{ item.total_price }} руб.
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div>
+            {% if order.coupon %}
+                <div>Цена без скидки: {{ order.get_total_cost }} руб.</div>
+                <div>{{ order.coupon.code }} -{{ order.coupon.discount }}%</div>
+                <div>Скидка: {{ order.get_discount }} руб.</div>
+            {% endif %}
+            <div>Итого к оплате: {{ order.get_total_cost_with_discount }} руб.</div>
+        </div>
+    </div>
+</body>
+</html>

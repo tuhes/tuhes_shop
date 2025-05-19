@@ -36,7 +36,7 @@
     <h2>Активные заказы</h2>
     <ul>
         {% for order in active_orders %}
-            <li>Заказ № {{ order.id }}, Создан: {{ order.created_at }}
+            <li><a href="{% url 'orders:order_detail' order.id %}">Заказ № {{ order.id }}</a>, Создан: {{ order.created_at }}
                 <form method="post" action="{% url 'orders:order_cancel' order.id %}">
                     {% csrf_token %}
                     <button type="submit">Отменить заказ</button>
@@ -50,7 +50,7 @@
     <h2>Выполненные заказы</h2>
     <ul>
         {% for order in completed_orders %}
-            <li>Заказ № {{ order.id }}, Создан: {{ order.created_at }}</li>
+            <li><a href="{% url 'orders:order_detail' order.id %}">Заказ № {{ order.id }}</a>, Создан: {{ order.created_at }}
         {% empty %}
             <li>Нет выполненных заказов</li>
         {% endfor %}
@@ -59,7 +59,7 @@
     <h2>Отменённые заказы</h2>
     <ul>
         {% for order in canceled_orders %}
-            <li>Заказ № {{ order.id }}, Создан: {{ order.created_at }}</li>
+            <li><a href="{% url 'orders:order_detail' order.id %}">Заказ № {{ order.id }}</a>, Создан: {{ order.created_at }}
         {% empty %}
             <li>Нет отменённых заказов</li>
         {% endfor %}

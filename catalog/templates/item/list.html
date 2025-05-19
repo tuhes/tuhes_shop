@@ -14,4 +14,15 @@
             <p>{{ item.price }} руб.</p>
         </div>
     {% endfor %}
+    <hr>
+    <div>
+        <h3>10 Самых популярных товаров</h3>
+        <ul>
+            {% for i in items_top %}
+                <li>
+                    <a href="{{ i.get_absolute_url }}">{{ i.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}

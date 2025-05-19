@@ -34,13 +34,37 @@
 {% endwith %}
 {% endfor %}
 <tr>
-    <td colspan="4">Итого: {{ cart.get_total_price }} руб.</td>
+    <td colspan="5">Стоимость: {{ cart.get_total_price }} руб</td>
+</tr>
+<tr>
+    <td colspan="5">Скидка: {{ cart.get_discount }} руб</td>
+</tr>
+<tr>
+    <td colspan="5">Итого к оплате: {{ cart.get_total_price_with_discount }} руб</td>
+</tr>
+<tr>
+    <td colspan="5">
+    <form action="{% url 'coupons:coupon_apply' %}" method="post">
+        {{ coupon_form.as_p }}
+        {% csrf_token %}
+        <button type="submit">Применить</button>
+    </form>
+    <hr>
 </tr>
 </tbody>
 </table>
-<form action="{% url 'cart:cart_clear' %}" method="post">
-    {% csrf_token %}
-    <button type="submit">Очистить корзину</button>
-</form>
+<div>
+    <form action="{% url 'cart:cart_clear' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Очистить корзину</button>
+    </form>
+</div>
+<div>
+    <hr>
+    <form action="{% url 'orders:order_create' %}" method="get">
+        {% csrf_token %}
+        <button type="submit">Оформить заказ</button>
+    </form>
+</div>
 </body>
 </html>

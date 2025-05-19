@@ -1,8 +1,9 @@
 from django.contrib.auth.models import User
 from django.db import models
-
+from decimal import Decimal
 from catalog.models import Item
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
+from coupons.models import Coupon
 
 
 ORDER_STATUS_CHOICES = (
@@ -25,6 +26,8 @@ class Order(models.Model):
                               choices=ORDER_STATUS_CHOICES,
                               default='active')
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    coupon = models.ForeignKey(Coupon, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="промокод")
+    discount = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(99)])
 
     class Meta:
         ordering = ['-created_at']
@@ -34,6 +37,14 @@ class Order(models.Model):
 
     def get_total_cost(self):
         return sum(order_item.total_price() for order_item in self.orderitem_set.all())
+
+    def get_discount(self):
+        if self.discount > 0:
+            return self.get_total_cost() * (self.discount / Decimal(100))
+        return Decimal(0)
+
+    def get_total_cost_with_discount(self):
+        return self.get_total_cost() - self.get_discount()
 
 
 class OrderItem(models.Model):

@@ -3,6 +3,11 @@ from django.contrib.auth.decorators import login_required
 from accounts.forms import CustomAuthenticationForm, CustomUserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from orders.models import Order
+import hashlib
+import hmac
+from django.conf import settings
+from django.http import HttpResponseBadRequest
+from django.contrib.auth.models import User
 
 
 def login_view(request):
@@ -62,3 +67,32 @@ def profile_view(request):
     }
 
     return render(request, 'registration/profile.html', context=orders)
+
+
+def verify_telegram_auth(data: dict, token: str) -> bool:
+    auth_data = data.copy()
+    hash_received = auth_data.pop('hash')
+    secret_key = hashlib.sha256(token.encode()).digest()
+    check_string = '\n'.join([f"{k}={v}" for k,v in sorted(auth_data.items())])
+    hmac_hash = hmac.new(secret_key, check_string.encode(), hashlib.sha256).hexdigest()
+    return hmac_hash == hash_received
+
+
+def telegram_login_complete(request):
+    data = request.GET.dict()
+
+    if not verify_telegram_auth(data, settings.TELEGRAM_BOT_TOKEN):
+        return HttpResponseBadRequest("Invalid hash")
+
+    telegram_id = data.get('id')
+    username = data.get('username')
+
+    user, created = User.objects.get_or_create(username=username, defaults={'first_name': data.get("first_name")})
+
+    if created:
+        user.set_unusable_password()
+        user.save()
+
+    user.backend = 'django.contrib.auth.backends.ModelBackend'
+    login(request, user)
+    return redirect('accounts:profile_view')

@@ -1,5 +1,12 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
+from django.db.models import Avg
+from django.core.validators import MaxLengthValidator, MinLengthValidator
+
+
+RATING_CHOICES = [(i, str(i)) for i in range(1, 6)]
+
 
 class Game(models.Model):
     name = models.CharField(max_length=50, verbose_name='Название')
@@ -49,3 +56,22 @@ class Item(models.Model):
 
     def get_absolute_url(self):
         return reverse('catalog:item_detail', args=[self.id, self.slug])
+
+    def average_rating(self):
+        avg = self.reviews.aggregate(Avg('rating'))['rating__avg']
+        return round(avg, 1) if avg else 0
+
+
+class Review(models.Model):
+    item = models.ForeignKey(Item, related_name='reviews', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.TextField(validators=[MinLengthValidator(3), MaxLengthValidator(100)])
+    rating = models.IntegerField(choices=RATING_CHOICES)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        unique_together = ('item', 'user')
+
+    def __str__(self):
+        return f'Отзыв от {self.user.username}'

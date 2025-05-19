@@ -3,6 +3,7 @@ from django.views.decorators.http import require_POST
 from catalog.models import Item
 from cart.cart import Cart
 from cart.forms import CartAddItemForm
+from coupons.forms import CouponApplyForm
 
 
 @require_POST
@@ -20,7 +21,9 @@ def cart_add(request, item_id):
 
 def cart_detail(request):
     cart = Cart(request)
-    return render(request, 'cart/detail.html', {'cart': cart})
+    coupon_form = CouponApplyForm()
+    return render(request, 'cart/detail.html', {'cart': cart,
+                                                                    'coupon_form': coupon_form})
 
 @require_POST
 def cart_remove(request, item_id):

@@ -7,10 +7,42 @@
 <body>
 <h2>Оформление заказа</h2>
 <hr>
+<table>
+    <thead>
+        <tr>
+            <th>Предмет</th>
+            <th>Кол-во</th>
+            <th>Цена за штуку</th>
+            <th>Cтоимость</th>
+        </tr>
+    </thead>
+<tbody>
+{% for item in cart %}
+{% with product=item.product %}
+<tr>
+    <td>{{ product.name }}</td>
+    <td>{{ item.quantity }}</td>
+    <td>{{ item.price }} руб.</td>
+    <td>{{ item.total_price }} руб.</td>
+</tr>
+{% endwith %}
+{% endfor %}
+</tbody>
+</table>
+<hr>
+<div>
+    {% if cart.coupon %}
+        <div>Цена без скидки:{{ cart.get_total_price }}</div>
+        <div>{{ cart.get_coupon.code }} -{{ cart.get_coupon.discount }}</div>
+        <div>Скидка: {{ cart.get_discount }}</div>
+    {% endif %}
+    <div>Итого к оплате: {{ cart.get_total_price_with_discount }}</div>
+</div>
 <form method="post">
     {{ form.as_div }}
     {% csrf_token %}
     <div><input type="submit" value="Оформить заказ"></div>
 </form>
+
 </body>
 </html>

@@ -11,10 +11,37 @@
         <p>
             <b>{{ item.price }} руб.</b>
         </p>
+        <p>
+            Просмотров: <b>{{ view_count }}</b></p>
+        </p>
         <form action="{% url 'cart:cart_add' item.id %}" method="post">
         {{ cart_add_item_form }}
         {% csrf_token %}
         <input type="submit" value="Добавить в корзину">
     </form>
+    </div>
+    <h3>Отзывы</h3>
+    <div>
+        {% if can_review %}
+        <hr>
+            <form action="{% url 'catalog:review_add' item.id %}" method="post">
+            {{ review_form.as_div }}
+            {% csrf_token %}
+            <button type="submit">Оставить отзыв</button>
+            </form>
+        {% else %}
+            <p>Чтобы оставить отзыв, вы должны авторизоваться и купить этот товар</p>
+        <hr>
+        {% endif %}
+    </div>
+    <div>
+        {% for review in reviews %}
+        <hr>
+            <h5>{{ review.user.username }}</h5>
+            <p>{{ review.created_at }}</p>
+            <p>{{ review.text }}</p>
+        {% empty %}
+            <p>Пока отзывов нет</p>
+        {% endfor %}
     </div>
 {% endblock %}
